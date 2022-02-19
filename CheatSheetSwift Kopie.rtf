@@ -1,0 +1,146 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2636
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;}
+{\colortbl;\red255\green255\blue255;\red108\green121\blue134;\red31\green31\blue36;\red255\green255\blue255;
+\red251\green0\blue133;\red93\green216\blue255;\red65\green161\blue192;\red252\green106\blue93;\red208\green168\blue255;
+\red158\green241\blue221;\red103\green183\blue164;\red103\green183\blue164;\red208\green168\blue255;\red149\green226\blue207;
+\red161\green103\blue230;\red176\green114\blue255;\red208\green191\blue105;}
+{\*\expandedcolortbl;;\csgenericrgb\c42394\c47462\c52518;\csgenericrgb\c12054\c12284\c14131;\csgenericrgb\c100000\c100000\c100000\c85000;
+\csgenericrgb\c98585\c0\c52320;\csgenericrgb\c36295\c84643\c99897;\csgenericrgb\c25490\c63137\c75294;\csgenericrgb\c98912\c41558\c36568;\csgenericrgb\c81681\c65692\c99927;
+\csgenericrgb\c62145\c94386\c86819;\csgenericrgb\c40538\c71705\c64209;\csgenericrgb\c40392\c71765\c64314;\csgenericrgb\c81569\c65882\c100000;\csgenericrgb\c58346\c88507\c81000;
+\csgenericrgb\c63232\c40219\c90115;\csgenericrgb\c69212\c44566\c99892;\csgenericrgb\c81498\c74939\c41233;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh16380\viewkind0
+\deftab692
+\pard\tx692\pardeftab692\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf2 \cb3 //
+\fs28 \cf4 \
+
+\fs26 \cf2 //  NetworkManager.swift
+\fs28 \cf4 \
+
+\fs26 \cf2 //  ZahnzusatzCheck
+\fs28 \cf4 \
+
+\fs26 \cf2 //
+\fs28 \cf4 \
+
+\fs26 \cf2 //  Created by Tim Irrgang on 18.02.22.
+\fs28 \cf4 \
+
+\fs26 \cf2 //
+\fs28 \cf4 \
+\
+
+\f1\b \cf5 import
+\f0\b0 \cf4  Foundation\
+
+\f1\b \cf5 import
+\f0\b0 \cf4  Alamofire\
+\
+
+\f1\b \cf5 class
+\f0\b0 \cf4  \cf6 NetworkManager\cf4  \{\
+    
+\f1\b \cf5 let
+\f0\b0 \cf4  \cf7 baseURL\cf4  = \cf8 ""\cf4 \
+    \
+    
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf7 getResultsByBirthday\cf4 (\cf7 date\cf4 : \cf9 String\cf4 , \cf7 completed\cf4 : 
+\f1\b \cf5 @escaping
+\f0\b0 \cf4  (\cf10 ResponseData\cf4 ?, \cf9 String\cf4 ? ) -> \cf9 Void\cf4 ) \{\
+        \
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  endpoint = \cf8 ""\cf4 \
+      \
+        \cf11 AF\cf4 .\cf12 request\cf4 (endpoint).\cf12 responseDecodable\cf4 (\cf12 of\cf4 : ModelName.
+\f1\b \cf5 self
+\f0\b0 \cf4 ) \{ response 
+\f1\b \cf5 in
+\f0\b0 \cf4 \
+            
+\f1\b \cf5 guard
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  cleanData = response.\cf11 value\cf4 ?.\cf11 data\cf4  
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+                completed(
+\f1\b \cf5 nil
+\f0\b0 \cf4 , \cf8 "error"\cf4 )\
+                
+\f1\b \cf5 return
+\f0\b0 \cf4 \
+            \}\
+            completed(cleanData, 
+\f1\b \cf5 nil
+\f0\b0 \cf4 )\
+  \
+        \}\
+    \}\
+    \
+\}\
+\
+\cf11 window\cf4  = \cf13 UIWindow\cf4 (\cf14 frame\cf4 : \cf15 windowScene\cf4 .\cf15 screen\cf4 .\cf15 bounds\cf4 )\
+\
+\
+
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf7 tableView\cf4 (\cf7 _\cf4  tableView: \cf13 UITableView\cf4 , \cf7 cellForRowAt\cf4  indexPath: \cf9 IndexPath\cf4 ) -> \cf13 UITableViewCell\cf4  \{\
+    
+\f1\b \cf5 if
+\f0\b0 \cf4  \cf11 isLoading\cf4  \{\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  cell = \cf13 UITableViewCell\cf4 ()\
+        cell.\cf15 textLabel\cf4 ?.\cf15 text\cf4  = \cf8 "Loading..."\cf4 \
+        
+\f1\b \cf5 return
+\f0\b0 \cf4  cell\
+    \}
+\f1\b \cf5 else
+\f0\b0 \cf4  \{\
+        
+\f1\b \cf5 let
+\f0\b0 \cf4  cell = tableView.\cf16 dequeueReusableCell\cf4 (\cf16 withIdentifier\cf4 : \cf14 CheckTableViewCell\cf4 .\cf11 reuseIdentifier\cf4 ) 
+\f1\b \cf5 as
+\f0\b0 \cf4 ? \cf14 CheckTableViewCell\cf4 \
+        
+\f1\b \cf5 guard
+\f0\b0 \cf4  
+\f1\b \cf5 let
+\f0\b0 \cf4  safeCell = cell 
+\f1\b \cf5 else
+\f0\b0 \cf4  \{ 
+\f1\b \cf5 return
+\f0\b0 \cf4  \cf13 UITableViewCell\cf4 () \}\
+        \
+        safeCell.
+\f1\b \cf5 set
+\f0\b0 \cf4 (imageURL: \cf8 ""\cf4 )\
+        
+\f1\b \cf5 return
+\f0\b0 \cf4  safeCell\
+    \}\
+    \
+\}\
+
+\f1\b \cf5 func
+\f0\b0 \cf4  \cf7 configureTableView\cf4 ()  \{\
+    \cf11 tableView\cf4 .\cf15 delegate\cf4  = 
+\f1\b \cf5 self
+\f0\b0 \cf4 \
+    \cf11 tableView\cf4 .\cf15 dataSource\cf4  = 
+\f1\b \cf5 self
+\f0\b0 \cf4 \
+    \cf11 tableView\cf4 .\cf15 rowHeight\cf4  = \cf17 260\cf4 \
+    \cf11 tableView\cf4 .\cf15 separatorStyle\cf4  = .\cf15 none\cf4 \
+    \cf11 tableView\cf4 .\cf16 register\cf4 (\cf14 CheckTableViewCell\cf4 .
+\f1\b \cf5 self
+\f0\b0 \cf4 , \cf16 forCellReuseIdentifier\cf4 : \cf14 CheckTableViewCell\cf4 .\cf11 reuseIdentifier\cf4 )\
+    \
+    \cf15 view\cf4 .\cf16 addSubview\cf4 (\cf11 tableView\cf4 )\
+    \cf11 tableView\cf4 .edgesToSuperview()\
+\}\
+}
